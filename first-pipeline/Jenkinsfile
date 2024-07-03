@@ -1,0 +1,43 @@
+pipeline {
+    agent { label 'slave-agent' }
+
+    stages {
+        stage('Hello-test') {
+            steps {
+                echo 'Hello Test'
+            }
+        }
+        stage('Install git') {
+            steps {
+                sh '''
+                    sudo yum update -y
+                    sudo yum install git-all -y
+                '''
+            }
+        }
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Install and Run Apache') {
+            steps {
+                script {
+                    sh '''
+                        sudo yum install httpd -y
+                        sudo systemctl start httpd.service
+                        sudo systemctl enable httpd.service
+                        sudo firewall-cmd --zone=public --add-service=http --permanent
+                        sudo firewall-cmd --reload
+                        sudo cp ${WORKSPACE}/index.html /var/www/html/index.html
+                    '''
+                }
+            }
+        }
+    }
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
