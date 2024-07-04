@@ -1,8 +1,19 @@
 # ITGix-Internship
+
 ## Ден 1
-### &emsp;- vagrant-setup/
+
+### &emsp;- [vagrant-setup/](vagrant-setup/)
+
 ## Ден 2
-### &emsp;- python-dataset/
-### &emsp;- jenkins-installation/
+
+### &emsp;- [python-dataset/](python-dataset/)
+
+### &emsp;- [jenkins-installation/](jenkins-installation/)
+
 ## Ден 3
-### &emsp;- first-pipeline/
+
+### &emsp;- [first-pipeline/](first-pipeline/)
+
+## Ден 4
+
+### &emsp;- [ansible/](ansible/)
