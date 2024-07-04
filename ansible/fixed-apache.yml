@@ -1,0 +1,32 @@
+---
+- name: install httpd
+  hosts: all
+  tasks:
+    - name: install httpd package
+      package:
+        name: httpd
+        state: present
+
+    - name: create an index.html
+      copy: 
+        content: 'welcome to this webserver'
+        dest: /var/www/html/index.html
+
+    - name: start the httpd service
+      service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: start firewall 
+      command: >
+        systemctl start firewalld
+
+    - name: open firewall port 80
+      command: >
+        firewall-cmd --permanent --add-port=80/tcp
+
+    - name: reload firewalld
+      command: >
+        firewall-cmd --reload
+

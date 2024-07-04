@@ -1,0 +1,35 @@
+---
+- name: Check versions of installed modules
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check Python version
+      command: python3 --version
+      register: python_version
+
+    - name: Print Python version
+      debug:
+        msg: "Python version: {{ python_version.stdout }}"
+
+    - name: Check Firewalld version
+      command: firewall-cmd --version
+      register: firewalld_version
+      ignore_errors: yes
+
+    - name: Print Firewalld version
+      debug:
+        msg: "Firewalld version: {{ firewalld_version.stdout }}"
+
+    - name: Ensure pip3 is installed
+      yum:
+        name: python3-pip
+        state: present
+
+    - name: List installed pip3 packages
+      command: pip3 list
+      register: pip_list
+
+    - name: Print installed pip3 packages
+      debug:
+        msg: "{{ pip_list.stdout_lines }}"
+        

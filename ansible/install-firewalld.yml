@@ -1,0 +1,39 @@
+---
+- name: Ensure firewalld and Python firewall module are installed
+  hosts: all
+  become: yes
+  tasks:
+    - name: Install firewalld
+      command: yum install -y firewalld
+      register: firewalld_install
+      ignore_errors: yes
+
+    - name: Start and enable firewalld service
+      command: systemctl enable --now firewalld
+      when: firewalld_install.changed
+
+    - name: Install pip3
+      command: yum install -y python3-pip
+      register: pip3_install
+      ignore_errors: yes
+
+    - name: Install firewall Python module
+      command: pip3 install firewall
+      when: pip3_install.changed or firewalld_install.changed
+
+    - name: Check firewalld version
+      command: firewall-cmd --version
+      register: firewalld_version
+
+    - name: Print firewalld version
+      debug:
+        msg: "Firewalld version: {{ firewalld_version.stdout }}"
+
+    - name: Check installed Python firewall module version
+      command: python3 -c 'import firewall; print(firewall.__version__)'
+      register: firewall_python_version
+
+    - name: Print installed Python firewall module version
+      debug:
+        msg: "Python firewall module version: {{ firewall_python_version.stdout }}"
+

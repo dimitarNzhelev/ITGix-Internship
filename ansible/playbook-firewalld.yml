@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install firewalld and its Python module
+      yum:
+        name:
+          - firewalld
+          - python3-firewall
+        state: present
+        update_cache: yes
+
+    - name: Ensure firewalld is running and enabled
+      service:
+        name: firewalld
+        state: started
+        enabled: yes
+
