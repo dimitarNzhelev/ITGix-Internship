@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+      MYSQL_DATABASE: my-db
+      MYSQL_USER: my-user
+      MYSQL_PASSWORD: my-password
+    volumes:
+      - ./data:/var/lib/mysql
+
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: my-db
+      WORDPRESS_DB_USER: my-user
+      WORDPRESS_DB_PASSWORD: my-password
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
