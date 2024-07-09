@@ -21,3 +21,4 @@
 ## Ден 5
 
 ### &emsp;- [docker/](docker/)
+### &emsp;- [kubernetes/](kubernetes/)
