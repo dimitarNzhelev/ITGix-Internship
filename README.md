@@ -22,3 +22,8 @@
 
 ### &emsp;- [docker/](docker/)
 ### &emsp;- [kubernetes/](kubernetes/)
+
+## Ден 6
+
+### &emsp;- [terraform/](terraform/)
+### &emsp;- [terraform-infrastructure/](terraform-infrastructure/)
