@@ -27,3 +27,8 @@
 
 ### &emsp;- [terraform/](terraform/)
 ### &emsp;- [terraform-infrastructure/](terraform-infrastructure/)
+
+## Ден 7
+
+### &emsp;- [final-project/](final-project/)
+### &emsp;- [final-project-backend/](final-project-backend/)
