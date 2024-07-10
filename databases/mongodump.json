@@ -1,0 +1,12 @@
+{
+  "_id": { "$oid": "60c72b2f9b1d8f001c8e4d1a" },
+  "name": "John Doe",
+  "age": 29,
+  "email": "johndoe@example.com",
+  "address": {
+    "street": "123 Main St",
+    "city": "Anytown",
+    "state": "CA",
+    "zip": "12345"
+  }
+}

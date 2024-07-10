@@ -3,3 +3,7 @@ terraform*/.terraform.lock.hcl
 terraform*/terraform.tfstate
 terraform*/terraform.tfstate.backup
 terraform*/.terraform/
+databases/data/
+databases/data-mariadb/
+databases/uploads/
+databases/.my.cnf
