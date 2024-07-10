@@ -1,8 +1,8 @@
 vagrant-setup/.vagrant/
-terraform*/.terraform.lock.hcl
-terraform*/terraform.tfstate
-terraform*/terraform.tfstate.backup
-terraform*/.terraform/
+*/.terraform.lock.hcl
+*/terraform.tfstate
+*/terraform.tfstate.backup
+*/.terraform/
 databases/data/
 databases/data-mariadb/
 databases/uploads/
