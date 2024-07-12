@@ -8,11 +8,6 @@ variable "SSH_PRIVATE_KEY" {
   type        = string
 }
 
-variable "ITGIX_PRIVATE_KEY" {
-  description = "Private ITGIX SSH key for instances"
-  type        = string
-}
-
 variable "gitlab_instance_url" {
   description = "GitLab instance URL"
   type        = string

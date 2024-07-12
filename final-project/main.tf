@@ -9,30 +9,15 @@ resource "aws_instance" "mdp-openvpn" {
   associate_public_ip_address = true
   vpc_security_group_ids = [aws_security_group.mdp_openvpn_sg.id] 
   
-  user_data = <<EOF
-		#!/bin/bash
-    ${file("${path.module}/openvpn-setup.sh")}
-    yum update -y
-    sudo usermod -aG wheel ec2-user
-    echo -e "${var.SSH_PUBLIC_KEY}" >> /root/.ssh/id_rsa.pub
-    echo -e "${var.SSH_PRIVATE_KEY}" >> /root/.ssh/id_rsa
-    chmod 600 /root/.ssh/id_rsa
-    chmod 644 /root/.ssh/id_rsa.pub
-    sudo amazon-linux-extras install ansible2 -y
-    sudo yum install git -y
-
-    echo "[ec2s]
-    RocketChat ansible_host=${aws_instance.mdp-rocket-chat.private_ip}
-    Vault ansible_host=${aws_instance.mdp-vault.private_ip}" > inventory
-
-    sudo curl -L --output /usr/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64
-    sudo chmod +x /usr/bin/gitlab-runner
-    sudo useradd --comment 'GitLab Runner' --create-home gitlab-runner --shell /bin/bash
-    sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
-    sudo gitlab-runner register --non-interactive --executor shell --url ${var.gitlab_instance_url} --registration-token ${var.registration_token} --description ${var.gitlab_runner_description}
-    echo 'gitlab-runner ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/gitlab-runner
-    sudo gitlab-runner start
-  EOF
+  user_data = templatefile("${path.module}/vpn-machine-setup.tpl", {
+    SSH_PUBLIC_KEY        = var.SSH_PUBLIC_KEY,
+    SSH_PRIVATE_KEY       = var.SSH_PRIVATE_KEY,
+    rocket_chat_ip        = aws_instance.mdp-rocket-chat.private_ip,
+    vault_ip              = aws_instance.mdp-vault.private_ip,
+    gitlab_instance_url   = var.gitlab_instance_url,
+    registration_token    = var.registration_token,
+    gitlab_runner_description = var.gitlab_runner_description
+  })
 }
 
 resource "aws_instance" "mdp-rocket-chat" {

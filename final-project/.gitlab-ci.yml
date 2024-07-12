@@ -2,10 +2,10 @@ stages:
   - validate
   - plan
   - apply
-  - wait-for-runner
+  - destroy
   - install-docker
-  - install-rocket
   - install-vault
+  - install-rocket
 
 image:
   name: hashicorp/terraform:light
@@ -31,7 +31,7 @@ plan:
   stage: plan
   script:
     - terraform init
-    - terraform plan -lock=false -var "SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}" -var "SSH_PUBLIC_KEY=${SSH_PUBLIC_KEY}" -var "ITGIX_PRIVATE_KEY=${ITGIX_PRIVATE_KEY}" -var "gitlab_runner_description=${gitlab_runner_description}" -var "gitlab_instance_url=${gitlab_instance_url}" -var "registration_token=${registration_token}"
+    - terraform plan -lock=false -var "SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}" -var "SSH_PUBLIC_KEY=${SSH_PUBLIC_KEY}" -var "gitlab_runner_description=${gitlab_runner_description}" -var "gitlab_instance_url=${gitlab_instance_url}" -var "registration_token=${registration_token}"
   dependencies:
     - validate
   artifacts:
@@ -44,7 +44,18 @@ apply:
   stage: apply
   script:
     - terraform init
-    - terraform apply --auto-approve -lock=false -var "SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}" -var "SSH_PUBLIC_KEY=${SSH_PUBLIC_KEY}" -var "ITGIX_PRIVATE_KEY=${ITGIX_PRIVATE_KEY}" -var "gitlab_runner_description=${gitlab_runner_description}" -var "gitlab_instance_url=${gitlab_instance_url}" -var "registration_token=${registration_token}"
+    - terraform apply --auto-approve -lock=false -var "SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}" -var "SSH_PUBLIC_KEY=${SSH_PUBLIC_KEY}" -var "gitlab_runner_description=${gitlab_runner_description}" -var "gitlab_instance_url=${gitlab_instance_url}" -var "registration_token=${registration_token}"
+  dependencies:
+    - plan
+  when: manual
+  tags:
+    - ci-shared
+
+destroy:
+  stage: destroy
+  script:
+    - terraform init
+    - terraform destroy --auto-approve -lock=false -var "SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}" -var "SSH_PUBLIC_KEY=${SSH_PUBLIC_KEY}" -var "gitlab_runner_description=${gitlab_runner_description}" -var "gitlab_instance_url=${gitlab_instance_url}" -var "registration_token=${registration_token}"
   dependencies:
     - plan
   when: manual
