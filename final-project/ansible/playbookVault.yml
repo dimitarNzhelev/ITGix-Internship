@@ -1,0 +1,14 @@
+---
+- name: install vault
+  hosts: Vault
+  become: yes
+  tasks:
+    - name: place script
+      template:
+        src: docker-compose-vault.yaml.j2
+        dest: /home/ec2-user/docker-compose.yaml
+
+    - name: run vault with docker-compose
+      command: /usr/local/bin/docker-compose up -d
+      args:
+        chdir: /home/ec2-user/

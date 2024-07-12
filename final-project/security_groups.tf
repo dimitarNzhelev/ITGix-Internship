@@ -7,7 +7,7 @@ resource "aws_security_group" "mdp-access-openvpn-sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    security_groups = [aws_security_group.elsys_mrejari_openvpn_sg.id]
+    security_groups = [aws_security_group.mdp_openvpn_sg.id]
   }
 
     egress {
@@ -22,7 +22,7 @@ resource "aws_security_group" "mdp-access-openvpn-sg" {
   }
 }
 
-resource "aws_security_group" "elsys_mrejari_openvpn_sg" {
+resource "aws_security_group" "mdp_openvpn_sg" {
   name        = "mdp-openvpn-sg"
   description = "Security group for OpenVPN instance to allow global access"
   vpc_id      = aws_vpc.mdp-vpc.id

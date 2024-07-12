@@ -1,0 +1,46 @@
+- name: Install Docker and Docker Compose
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update all packages
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install Docker from amazon-linux-extras
+      command: amazon-linux-extras install docker -y
+
+    - name: Install Docker using yum
+      yum:
+        name: docker
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add ec2-user to Docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: Reboot the instance to apply group membership
+      reboot:
+
+    - name: Wait for the server to come back online
+      wait_for_connection:
+        timeout: 300
+
+    - name: Check Docker info
+      command: docker info
+      register: docker_info
+      failed_when: docker_info.rc != 0
+
+    - name: Install Docker Compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/latest/download/docker-compose-Linux-x86_64"
+        dest: /usr/local/bin/docker-compose
+        mode: "0755"

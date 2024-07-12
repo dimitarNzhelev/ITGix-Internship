@@ -1,0 +1,15 @@
+---
+- name: install rocket
+  hosts: RocketChat
+  vars:
+    rocket_chat_version: "4.8.6"
+    mongo_version: "4.4"
+  tasks:
+    - name: place script
+      template:
+        src: docker-compose-rocket.yaml.j2
+        dest: /home/ec2-user/docker-compose.yaml
+    - name: run script
+      command: /usr/local/bin/docker-compose up -d
+      args:
+        chdir: /home/ec2-user/
